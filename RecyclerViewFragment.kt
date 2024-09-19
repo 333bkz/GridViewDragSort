@@ -54,12 +54,12 @@ class RecyclerViewFragment : BaseFragment<BaseViewModel, FragmentRecyclerBinding
                 if (from.beforeSize % 2 == 0) { //左侧
                     val followItem = items[fromPosition + 1]
                     if (fromPosition < toPosition) { //上->下
-                        onSwap(fromPosition, toPosition)
+                        onMove(fromPosition, toPosition)
                         fromPosition = items.indexOf(followItem)
                         toPosition = items.indexOf(from)
                         onMove(fromPosition, toPosition)
                     } else { //下->上
-                        onSwap(fromPosition, toPosition)
+                        onMove(fromPosition, toPosition)
                         fromPosition = items.indexOf(followItem)
                         toPosition = items.indexOf(to)
                         onMove(fromPosition, toPosition)
