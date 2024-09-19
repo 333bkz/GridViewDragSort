@@ -49,7 +49,7 @@ class RecyclerViewFragment : BaseFragment<BaseViewModel, FragmentRecyclerBinding
             val from = items[fromPosition]
             val to = items[toPosition]
             if (from.spanSize == to.spanSize) {
-                onSwap(fromPosition, toPosition)
+                onMove(fromPosition, toPosition)
             } else if (from.spanSize == 1) { //1x1
                 if (from.beforeSize % 2 == 0) { //左侧
                     val followItem = items[fromPosition + 1]
@@ -57,16 +57,16 @@ class RecyclerViewFragment : BaseFragment<BaseViewModel, FragmentRecyclerBinding
                         onSwap(fromPosition, toPosition)
                         fromPosition = items.indexOf(followItem)
                         toPosition = items.indexOf(from)
-                        onSwap(fromPosition, toPosition)
+                        onMove(fromPosition, toPosition)
                     } else { //下->上
                         onSwap(fromPosition, toPosition)
                         fromPosition = items.indexOf(followItem)
                         toPosition = items.indexOf(to)
-                        onSwap(fromPosition, toPosition)
+                        onMove(fromPosition, toPosition)
                     }
                 } else { //右侧
                     val followItem = items[fromPosition - 1]
-                    onSwap(fromPosition, toPosition)
+                    onMove(fromPosition, toPosition)
                     if (fromPosition < toPosition) { //上->下
                         fromPosition = items.indexOf(followItem)
                         toPosition = items.indexOf(to)
@@ -74,13 +74,13 @@ class RecyclerViewFragment : BaseFragment<BaseViewModel, FragmentRecyclerBinding
                         fromPosition = items.indexOf(followItem)
                         toPosition = items.indexOf(from)
                     }
-                    onSwap(fromPosition, toPosition)
+                    onMove(fromPosition, toPosition)
                 }
             } else { //1x2
                 if (fromPosition < toPosition) { //上->下
-                    onSwap(fromPosition, fromPosition + 2)
+                    onMove(fromPosition, fromPosition + 2)
                 } else { //下->上
-                    onSwap(fromPosition, fromPosition - 2)
+                    onMove(fromPosition, fromPosition - 2)
                 }
             }
             return true
@@ -118,8 +118,9 @@ class RecyclerViewFragment : BaseFragment<BaseViewModel, FragmentRecyclerBinding
         }
     }
 
-    private fun onSwap(form: Int, to: Int) {
-        Collections.swap(items, form, to)
+    private fun onMove(form: Int, to: Int) {
+        val item = items.removeAt(form)
+        items.add(to, item)
         refreshBeforeSize()
         adapter.notifyItemMoved(form, to)
     }
